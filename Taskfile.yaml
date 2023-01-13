@@ -1,0 +1,30 @@
+version: '3'
+
+vars:
+  FACTORIO_LATEST_VERSION:
+    sh: wget -q 'https://raw.githubusercontent.com/factoriotools/factorio-docker/master/buildinfo.json' -O - | jq -r '(.[] |= ({tags})) [][] | select(.[] | contains("latest")) | .[0]'
+  FACTORIO_STABLE_VERSION:
+    sh: wget -q 'https://raw.githubusercontent.com/factoriotools/factorio-docker/master/buildinfo.json' -O - | jq -r '(.[] |= ({tags})) [][] | select(.[] | contains("stable")) | .[0]'
+env:
+  FACTORIO_VERSION: latest
+
+tasks:
+  build_stable:
+    cmds:
+      - docker build . --build-arg=FACTORIO_VERSION={{.FACTORIO_STABLE_VERSION}} -t factorio-ssh-launcher:{{.FACTORIO_STABLE_VERSION}}
+
+  build_latest:
+    cmds:
+      - docker build . --build-arg=FACTORIO_VERSION={{.FACTORIO_LATEST_VERSION}} -t factorio-ssh-launcher:{{.FACTORIO_LATEST_VERSION}}
+
+  test:run:
+    cmds:
+      - docker run --name factorio-ssh-launcher-test -e PASSWORD=password --rm -ti -p 2222:2222 factorio-ssh-launcher:{{.FACTORIO_STABLE_VERSION}}
+
+  test:stop:
+    cmds:
+      - docker rm -f factorio-ssh-launcher-test
+
+  test:connect:
+    cmds:
+      - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null root@localhost -p 2222
