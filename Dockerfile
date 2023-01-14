@@ -18,35 +18,40 @@ RUN cat <<EOF >/etc/ssh/sshd_config_force_command
 Match User root
   X11Forwarding no
   AllowTcpForwarding no
-  PermitTTY no
+  PermitTTY yes
   ForceCommand "/docker-entrypoint.sh"
 Match User factorio
   X11Forwarding no
   AllowTcpForwarding no
-  PermitTTY no
+  PermitTTY yes
   ForceCommand "/docker-entrypoint.sh"
 Match User factorio_version
   X11Forwarding no
   AllowTcpForwarding no
-  PermitTTY no
+  PermitTTY yes
   ForceCommand "/factorio-version.sh"
 Match User factorio_basemod_info
   X11Forwarding no
   AllowTcpForwarding no
-  PermitTTY no
+  PermitTTY yes
   ForceCommand "/factorio-basemod-info.sh"
+Match User factorio_create_save
+  X11Forwarding no
+  AllowTcpForwarding no
+  PermitTTY yes
+  ForceCommand "/factorio-create-save.sh"
 EOF
 
 RUN sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
  && cat /etc/ssh/sshd_config_force_command >> /etc/ssh/sshd_config \
  && echo "root:${PASSWORD}" | chpasswd \
  && echo "factorio:${PASSWORD}" | chpasswd \
- && addgroup -g "10010" -S "factorio_version" \
- && adduser -u "10010" -G "factorio_version" -s /bin/sh -SDH "factorio_version" \
- && addgroup -g "10011" -S "factorio_basemod_info" \
- && adduser -u "10011" -G "factorio_basemod_info" -s /bin/sh -SDH "factorio_basemod_info" \
+ && useradd -ou "$PUID" "-g${PGID}" "factorio_version" \
+ && useradd -ou "$PUID" "-g${PGID}" "factorio_basemod_info" \
+ && useradd -ou "$PUID" "-g${PGID}" "factorio_create_save" \
  && echo "factorio_version:${PASSWORD}" | chpasswd \
  && echo "factorio_basemod_info:${PASSWORD}" | chpasswd \
+ && echo "factorio_create_save:${PASSWORD}" | chpasswd \
  && sed -ie 's/#Port 22/Port 2222/g' /etc/ssh/sshd_config \
  && chmod 600 /etc/ssh/*_key \
  && chmod 644 /etc/ssh/*_key.pub
