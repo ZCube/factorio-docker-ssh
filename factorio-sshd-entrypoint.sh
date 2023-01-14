@@ -12,14 +12,14 @@ USERNAME="${TOKEN:-""}"
 
 mkdir -p $CONFIG
 
-if [[ -z ${PASSWORD+x} ]]; then
+if [[ -z ${SSH_ASSWORD+x} ]]; then
     echo "use default password"
 else
-    echo "root:${PASSWORD}" | chpasswd
-    echo "factorio:${PASSWORD}" | chpasswd
-    echo "factorio_version:${PASSWORD}" | chpasswd
-    echo "factorio_basemod_info:${PASSWORD}" | chpasswd
-    echo "factorio_create_save:${PASSWORD}" | chpasswd
+    echo "root:${SSH_ASSWORD}" | chpasswd
+    echo "factorio:${SSH_ASSWORD}" | chpasswd
+    echo "factorio_version:${SSH_ASSWORD}" | chpasswd
+    echo "factorio_basemod_info:${SSH_ASSWORD}" | chpasswd
+    echo "factorio_create_save:${SSH_ASSWORD}" | chpasswd
 fi
 
 if [[ ! -f $CONFIG/rconpw ]]; then
