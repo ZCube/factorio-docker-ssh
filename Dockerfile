@@ -54,7 +54,9 @@ RUN sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
  && echo "factorio_create_save:${PASSWORD}" | chpasswd \
  && sed -ie 's/#Port 22/Port 2222/g' /etc/ssh/sshd_config \
  && chmod 600 /etc/ssh/*_key \
- && chmod 644 /etc/ssh/*_key.pub
+ && chmod 644 /etc/ssh/*_key.pub \
+ && mv /opt/factorio/config/config.ini /opt/factorio/config/config.ini.original \
+ && ln -sf $CONFIG/config.ini /opt/factorio/config/config.ini
 
 EXPOSE 2222
 

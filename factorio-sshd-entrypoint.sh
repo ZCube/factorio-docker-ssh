@@ -26,6 +26,11 @@ if [[ ! -f $CONFIG/rconpw ]]; then
   pwgen 15 1 >"$CONFIG/rconpw"
 fi
 
+if [[ ! -f $CONFIG/config.ini ]]; then
+  cp /opt/factorio/config/config.ini.original $CONFIG/config.ini
+fi
+
+
 if [[ $(id -u) = 0 ]]; then
   usermod -o -u "$PUID" factorio
   usermod -o -u "$PUID" factorio_version
