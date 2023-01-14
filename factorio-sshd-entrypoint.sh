@@ -5,6 +5,8 @@ if [[ -z ${PASSWORD+x} ]]; then
 else
     echo "root:${PASSWORD}" | chpasswd
     echo "factorio:${PASSWORD}" | chpasswd
+    echo "factorio_version:${PASSWORD}" | chpasswd
+    echo "factorio_basemod_info:${PASSWORD}" | chpasswd
 fi
 
 /usr/sbin/sshd -D -o \

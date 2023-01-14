@@ -25,20 +25,36 @@ Match User factorio
   AllowTcpForwarding no
   PermitTTY no
   ForceCommand "/docker-entrypoint.sh"
+Match User factorio_version
+  X11Forwarding no
+  AllowTcpForwarding no
+  PermitTTY no
+  ForceCommand "/factorio-version.sh"
+Match User factorio_basemod_info
+  X11Forwarding no
+  AllowTcpForwarding no
+  PermitTTY no
+  ForceCommand "/factorio-basemod-info.sh"
 EOF
 
 RUN sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
  && cat /etc/ssh/sshd_config_force_command >> /etc/ssh/sshd_config \
  && echo "root:${PASSWORD}" | chpasswd \
  && echo "factorio:${PASSWORD}" | chpasswd \
+ && addgroup -g "10010" -S "factorio_version" \
+ && adduser -u "10010" -G "factorio_version" -s /bin/sh -SDH "factorio_version" \
+ && addgroup -g "10011" -S "factorio_basemod_info" \
+ && adduser -u "10011" -G "factorio_basemod_info" -s /bin/sh -SDH "factorio_basemod_info" \
+ && echo "factorio_version:${PASSWORD}" | chpasswd \
+ && echo "factorio_basemod_info:${PASSWORD}" | chpasswd \
  && sed -ie 's/#Port 22/Port 2222/g' /etc/ssh/sshd_config \
  && chmod 600 /etc/ssh/*_key \
  && chmod 644 /etc/ssh/*_key.pub
 
 EXPOSE 2222
 
-COPY factorio-sshd-entrypoint.sh /factorio-sshd-entrypoint.sh
-RUN chmod +x /factorio-sshd-entrypoint.sh
+COPY factorio-*.sh /
+RUN chmod +x /factorio-*.sh
 
 ENTRYPOINT []
 CMD ["/factorio-sshd-entrypoint.sh"]

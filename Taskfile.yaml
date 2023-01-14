@@ -28,3 +28,11 @@ tasks:
   test:connect:
     cmds:
       - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null root@localhost -p 2222
+
+  test:version:
+    cmds:
+      - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null factorio_version@localhost -p 2222
+
+  test:base:
+    cmds:
+      - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null factorio_basemod_info@localhost -p 2222
