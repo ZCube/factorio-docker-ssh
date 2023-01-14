@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/bash
 set -eoux pipefail
 
 FACTORIO_VOL=/factorio
@@ -22,14 +22,9 @@ else
     echo "factorio_create_save:${SSH_ASSWORD}" | chpasswd
 fi
 
-if [[ ! -f $CONFIG/rconpw ]]; then
-  pwgen 15 1 >"$CONFIG/rconpw"
-fi
-
 if [[ ! -f $CONFIG/config.ini ]]; then
   cp /opt/factorio/config/config.ini.original $CONFIG/config.ini
 fi
-
 
 if [[ $(id -u) = 0 ]]; then
   usermod -o -u "$PUID" factorio
@@ -45,6 +40,8 @@ cp /opt/factorio/data/base/info.json /factorio/data/base/info.json
 cp /opt/factorio/data/*.example.json /factorio/data/
 
 cp /factorio-ssh.sh /factorio/factorio-ssh.sh
+
+source /docker-entrypoint-prepare.sh
 
 /usr/sbin/sshd -D -o \
     "SetEnv=GENERATE_NEW_SAVE=${GENERATE_NEW_SAVE} \

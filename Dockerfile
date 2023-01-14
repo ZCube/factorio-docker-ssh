@@ -56,7 +56,9 @@ RUN sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
  && chmod 600 /etc/ssh/*_key \
  && chmod 644 /etc/ssh/*_key.pub \
  && mv /opt/factorio/config/config.ini /opt/factorio/config/config.ini.original \
- && ln -sf $CONFIG/config.ini /opt/factorio/config/config.ini
+ && ln -sf $CONFIG/config.ini /opt/factorio/config/config.ini \
+ && cat /docker-entrypoint.sh | grep -v -E "^exec" > /docker-entrypoint-prepare.sh \
+ && chmod +x /docker-entrypoint-prepare.sh
 
 EXPOSE 2222
 
