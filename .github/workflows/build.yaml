@@ -68,7 +68,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_stable.outputs.tags }}
           labels: ${{ steps.meta_stable.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ steps.repository.outputs.lowercase }}:stable
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ steps.repository.outputs.lowercase }}:${{ steps.factorio_version.outputs.FACTORIO_STABLE_VERSION }}
           cache-to: type=inline
           platforms: linux/amd64
       - name: Build and push
@@ -80,6 +80,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_latest.outputs.tags }}
           labels: ${{ steps.meta_latest.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ steps.repository.outputs.lowercase }}:latest
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ steps.repository.outputs.lowercase }}:${{ steps.factorio_version.outputs.FACTORIO_LATEST_VERSION }}
           cache-to: type=inline
           platforms: linux/amd64
