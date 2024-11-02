@@ -12,14 +12,14 @@ USERNAME="${TOKEN:-""}"
 
 mkdir -p $CONFIG
 
-if [[ -z ${SSH_ASSWORD+x} ]]; then
-    echo "use default password"
+if [[ -z ${SSH_PASSWORD+x} ]]; then
+  echo "use default password"
 else
-    echo "root:${SSH_ASSWORD}" | chpasswd
-    echo "factorio:${SSH_ASSWORD}" | chpasswd
-    echo "factorio_version:${SSH_ASSWORD}" | chpasswd
-    echo "factorio_basemod_info:${SSH_ASSWORD}" | chpasswd
-    echo "factorio_create_save:${SSH_ASSWORD}" | chpasswd
+  echo "root:${SSH_PASSWORD}" | chpasswd
+  echo "factorio:${SSH_PASSWORD}" | chpasswd
+  echo "factorio_version:${SSH_PASSWORD}" | chpasswd
+  echo "factorio_basemod_info:${SSH_PASSWORD}" | chpasswd
+  echo "factorio_create_save:${SSH_PASSWORD}" | chpasswd
 fi
 
 if [[ ! -f $CONFIG/config.ini ]]; then
@@ -44,7 +44,7 @@ cp /factorio-ssh.sh /factorio/factorio-ssh.sh
 source /docker-entrypoint-prepare.sh
 
 /usr/sbin/sshd -D -o \
-    "SetEnv=GENERATE_NEW_SAVE=${GENERATE_NEW_SAVE} \
+  "SetEnv=GENERATE_NEW_SAVE=${GENERATE_NEW_SAVE} \
     LOAD_LATEST_SAVE=${LOAD_LATEST_SAVE} \
     PORT=${PORT} \
     BIND=${BIND} \
@@ -60,4 +60,3 @@ source /docker-entrypoint-prepare.sh
     SCRIPTOUTPUT=${SCRIPTOUTPUT} \
     PUID=${PUID} \
     PGID=${PGID}"
- 
